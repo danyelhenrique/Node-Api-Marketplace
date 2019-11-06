@@ -22,4 +22,14 @@ routes.delete('/ads/:id', controllers.AdController.destroy)
 /**
  * end Ads Routes
  */
+
+/**
+  * Purchase Routes
+  */
+
+routes.post('/purchase', controllers.PurchaseController.store)
+/**
+ * end Purchase Routes
+ */
+
 module.exports = routes
