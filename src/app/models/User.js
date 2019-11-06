@@ -1,4 +1,5 @@
 const monogoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const UserSchema = new monogoose.Schema({
   name: {
@@ -19,6 +20,13 @@ const UserSchema = new monogoose.Schema({
     type: Date,
     default: Date.now
   }
+})
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next()
+  }
+  this.password = await bcrypt.hash(this.password, 8)
 })
 
 module.exports = monogoose.model('User', UserSchema)
