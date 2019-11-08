@@ -1,20 +1,27 @@
+const Sentry = require('@sentry/node')
+
 const express = require('express')
 const mongoose = require('mongoose')
 
-const Joi = require('@hapi/joi')
 const Youch = require('youch')
 
 const databaseConfig = require('./config/database')
+const sentryConfig = require('./config/sentry')
 
 class App {
   constructor () {
     this.express = express()
     this.isDev = process.env.NODE_ENV !== 'production'
 
+    this.sentry()
     this.database()
     this.middlewares()
     this.routes()
     this.exception()
+  }
+
+  sentry () {
+    Sentry.init(sentryConfig)
   }
 
   database () {
@@ -26,6 +33,7 @@ class App {
   }
 
   middlewares () {
+    this.express.use(Sentry.Handlers.requestHandler())
     this.express.use(express.json())
   }
 
@@ -34,6 +42,10 @@ class App {
   }
 
   exception () {
+    if (process.env.NODE_ENV === 'production') {
+      this.express.use(Sentry.Handlers.errorHandler())
+    }
+
     this.express.use(async (err, req, res, next) => {
       if (process.env.NODE_ENV !== 'production') {
         const youch = new Youch(err, req)

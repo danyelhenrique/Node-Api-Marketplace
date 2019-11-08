@@ -35,4 +35,11 @@ routes.post('/purchase', validators.purchase, handle(controllers.PurchaseControl
  * end Purchase Routes
  */
 
+/**
+  * Route to debug and test sentry
+  */
+
+// routes.get('/debug-sentry', (req, res) => {
+//   throw new TypeError('My Second Sentry error!')
+// })
 module.exports = routes
