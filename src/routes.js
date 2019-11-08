@@ -4,9 +4,10 @@ const routes = express.Router()
 const authMiddleware = require('./app/middlewares/auth')
 
 const controllers = require('./app/controllers')
+const validators = require('./app/validators')
 
-routes.post('/users', controllers.UserController.store)
-routes.post('/sessions', controllers.SessionController.store)
+routes.post('/users', validators.user, controllers.UserController.store)
+routes.post('/sessions', validators.session, controllers.SessionController.store)
 
 routes.use(authMiddleware)
 /**
@@ -15,8 +16,8 @@ routes.use(authMiddleware)
 
 routes.get('/ads', controllers.AdController.index)
 routes.get('/ads/:id', controllers.AdController.show)
-routes.post('/ads', controllers.AdController.store)
-routes.put('/ads/:id', controllers.AdController.update)
+routes.post('/ads', validators.ad, controllers.AdController.store)
+routes.put('/ads/:id', validators.ad, controllers.AdController.update)
 routes.delete('/ads/:id', controllers.AdController.destroy)
 
 /**
@@ -27,7 +28,7 @@ routes.delete('/ads/:id', controllers.AdController.destroy)
   * Purchase Routes
   */
 
-routes.post('/purchase', controllers.PurchaseController.store)
+routes.post('/purchase', validators.purchase, controllers.PurchaseController.store)
 /**
  * end Purchase Routes
  */
