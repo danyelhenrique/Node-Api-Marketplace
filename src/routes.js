@@ -8,6 +8,8 @@ const authMiddleware = require('./app/middlewares/auth')
 const controllers = require('./app/controllers')
 const validators = require('./app/validators')
 
+routes.get('/', (req, res) => res.json({ api: true }))
+
 routes.post('/users', validators.user, handle(controllers.UserController.store))
 routes.post('/sessions', validators.session, handle(controllers.SessionController.store))
 
